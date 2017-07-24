@@ -7,7 +7,7 @@ game.
 
 ## How to run the game
 
-To run the game, you will need to install the [LÖVE 2D]() game engine on your machine. Then, simply download this repository
+To run the game, you will need to install the [LÖVE 2D](https://love2d.org/) game engine on your machine. Then, simply download this repository
 and launch the game by executing the following command : 
 
 ```bash
