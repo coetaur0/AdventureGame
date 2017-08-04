@@ -16,6 +16,11 @@ local rooms = {
       left = {100, 356}
     },
 
+    -- List of doors in the room.
+    doors = {
+      {100, 356, 95, 214, false, "secondary", "right"}
+    },
+
     -- List of vertices defining the polygons that make up the walkable area
     -- of the room. The first table in 'polygons' is the main walkable area, the
     -- other ones define obstacles.
