@@ -22,6 +22,9 @@ As mentioned above, the game is programmed in Lua with the LÖVE 2D framework. I
 - [Sodapop](https://github.com/tesselode/sodapop) for animations.
 - [Shädows](https://github.com/matiasah/shadows) for the lighting engine.
 
+The code for pathfinding in the game's engine was largely inspired by and adapted from user [MicUurloon's](https://github.com/MicUurloon)
+code in his [AdventurePathfinding](https://github.com/MicUurloon/AdventurePathfinding) repository. 
+
 ## Assets
 
 The example assets provided in the "assets" folder of this repository were drawn by **Vivvian**, the artist currently working
