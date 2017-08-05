@@ -61,7 +61,7 @@ local rooms = {
     },
 
     doors = {
-      {x = 1253, y = 635, width = 95, height = 214, locked = false,
+      {x = 1195, y = 570, width = 95, height = 214, locked = false,
        nextRoom = "main", roomEntry = "left"}
     },
 
