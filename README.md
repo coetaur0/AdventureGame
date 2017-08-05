@@ -27,5 +27,5 @@ code in his [AdventurePathfinding](https://github.com/MicUurloon/AdventurePathfi
 
 ## Assets
 
-The example assets provided in the "assets" folder of this repository were drawn by **Vivvian**, the artist currently working
+The example assets provided in the "assets" folder of this repository were drawn by **Vivvian**, the artist working with me
 on the project.
