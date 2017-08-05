@@ -54,7 +54,8 @@ function Game:update(dt)
   -- Update of the list of messages in the game. Messages are erased (not
   -- displayed anymore) after a given time.
   for i, message in ipairs(self.messages) do
-    message.timelen = message.timelen - 1
+    message.timelen = message.timelen - dt
+    print(message.timelen)
     if message.timelen <= 0 then
       table.remove(self.messages, i)
     end

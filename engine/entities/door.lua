@@ -49,7 +49,7 @@ function Door:update(dt)
            game:addMessage("That door is locked...",
                            player.position.x + player.width/2,
                            player.position.y - player.height/2,
-                           100
+                           3
                           )
            room.playerLeavingRoom = false
          end

@@ -27,10 +27,19 @@ function Item:new(itemName)
   self.width = itemDef.width
   self.height = itemDef.height
 
+  self.leftEdge = self.position.x - self.width/2
+  self.rightEdge = self.position.x + self.width/2
+  self.topEdge = self.position.y - self.height/2
+  self.bottomEdge = self.position.y + self.height/2
+
   self.icon = love.graphics.newImage(itemDef.icon)
 
   self.onClickMessage = itemDef.onClickMessage
   self.onClickAction = itemDef.onClickAction
+
+  -- Variable indicating whether the player clicked on the item.
+  self.clickedLeft = false
+  self.clickedRight = false
   self.state = itemStates[itemName]
 end
 
@@ -38,11 +47,15 @@ end
 -- Show the message associated to the item when the player left clicks on it.
 --------------------------------------------------------------------------------
 function Item:onLeftClick()
-  game:addMessage(self.onClickMessage,
-                  player.position.x + player.width/2,
-                  player.position.y - player.height/2,
-                  100
-                 )
+  local x = 0
+  local y = player.position.y - player.height/2
+  if player.position.x < room.size[1]/2 then
+    x = player.position.x + player.width/2
+  else
+    x = player.position.x - player.width - love.graphics.getFont():getWidth(self.onClickMessage)
+  end
+  game:addMessage(self.onClickMessage, x, y, 3)
+  self.clickedLeft = false
 end
 
 --------------------------------------------------------------------------------
@@ -50,6 +63,9 @@ end
 --------------------------------------------------------------------------------
 function Item:update(dt)
   self.sprite:update(dt)
+  if self.clickedLeft and player.destination:sub(player.position):norm() == 0 then
+    self:onLeftClick()
+  end
 end
 
 --------------------------------------------------------------------------------

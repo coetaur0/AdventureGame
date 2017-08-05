@@ -30,6 +30,7 @@ function Room:new(roomName, entry)
   local currentRoom = rooms[roomName]
 
   self.background = love.graphics.newImage(currentRoom.background)
+  self.size = currentRoom.size
 
   -- A camera is created for the room.
   self.camera = gamera.new(0, 0, currentRoom.size[1], currentRoom.size[2])

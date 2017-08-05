@@ -45,5 +45,17 @@ function love.mousepressed(x, y, button, istouch)
       end
       room.playerLeavingRoom = false
     end
+
+    -- Check if the player clicked on an item in the room.
+    for i, item in ipairs(room.items) do
+      if x > item.leftEdge and
+         x < item.rightEdge and
+         y > item.topEdge and
+         y < item.bottomEdge then
+           item.clickedLeft = true
+      else
+        item.clickedLeft = false
+      end
+    end
   end
 end
