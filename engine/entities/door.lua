@@ -39,10 +39,19 @@ function Door:update(dt)
      player.position.y > self.topEdge and
      player.position.y < self.bottomEdge then
 
-       if room.playerLeavingRoom and not self.locked then
-         game:changeRoom(self.nextRoom, self.roomEntry)
-       else
-         room.playerLeavingRoom = false
+       if room.playerLeavingRoom then
+         if not self.locked then
+           game:changeRoom(self.nextRoom, self.roomEntry)
+         else
+           -- If the door's locked, a message is displayed on screen to
+           -- inform the player.
+           game:addMessage("That door is locked...",
+                           player.position.x + player.width/2,
+                           player.position.y - player.height/2,
+                           100
+                          )
+           room.playerLeavingRoom = false
+         end
        end
   end
 end

@@ -18,7 +18,7 @@ local rooms = {
 
     -- List of doors in the room.
     doors = {
-      {x = 100, y = 356, width = 95, height = 214, locked = false,
+      {x = 100, y = 332, width = 95, height = 214, locked = true,
        nextRoom = "secondary", roomEntry = "right"}
     },
 

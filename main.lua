@@ -34,13 +34,12 @@ function love.mousepressed(x, y, button, istouch)
     -- Add the new walkpath to the state of the player.
     player:move(room.walkpath)
 
-    -- Check if the player clicked on a door.
+    -- Check if the player clicked on a door to go to another room.
     for i, door in ipairs(room.doors) do
       if x > door.leftEdge and
          x < door.rightEdge and
          y > door.topEdge and
          y < door.bottomEdge then
-
            room.playerLeavingRoom = true
            break
       end
