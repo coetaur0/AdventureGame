@@ -18,7 +18,8 @@ local rooms = {
 
     -- List of doors in the room.
     doors = {
-      {100, 356, 95, 214, false, "secondary", "right"}
+      {x = 100, y = 356, width = 95, height = 214, locked = false,
+       nextRoom = "secondary", roomEntry = "right"}
     },
 
     -- List of vertices defining the polygons that make up the walkable area
@@ -47,6 +48,33 @@ local rooms = {
 
     -- List of positions and radius for lights in the room.
     lights = nil
+  },
+
+  -- Secondary room.
+  secondary = {
+    background = "assets/bedroom.png",
+
+    size = {1280, 720},
+
+    entrances = {
+      right = {1195, 602}
+    },
+
+    doors = {
+      {x = 1253, y = 635, width = 95, height = 214, locked = false,
+       nextRoom = "main", roomEntry = "left"}
+    },
+
+    polygons = {
+      {
+        {210, 350},
+        {633, 350},
+        {633, 550},
+        {1195, 550},
+        {1195, 602},
+        {84, 602}
+      }
+    }
   }
 }
 

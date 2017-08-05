@@ -49,13 +49,14 @@ playerAnims:addAnimation("walking_down", {
   }
 })
 
+-- Definition of the player, including its animations.
 local playerDef = {
   name = "player",
   init_x = 28/2,
   init_y = 200,
   speed = 250,
-  width = 28,
-  height = 40,
+  width = 168,
+  height = 236,
   animations = playerAnims
 }
 

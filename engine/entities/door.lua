@@ -20,17 +20,30 @@ function Door:new(x, y, width, height, locked, nextRoom, roomEntry)
   self.position = Vector2D(x, y)
   self.width = width
   self.height = height
+  self.leftEdge = self.position.x - self.width/2
+  self.rightEdge = self.position.x + self.width/2
+  self.topEdge = self.position.y - self.height/2
+  self.bottomEdge = self.position.y + self.height/2
   self.locked = locked
   self.nextRoom = nextRoom
   self.roomEntry = roomEntry
 end
 
 --------------------------------------------------------------------------------
--- Use a door to change the room in which the player is located.
+-- Update the state of the door: if the player's position is inside it and he
+-- clicked on it, it is being used.
 --------------------------------------------------------------------------------
-function Door:use()
-  if not self.locked then
-    room = Room(self.nextRoom, self.roomEntry)
+function Door:update(dt)
+  if player.position.x > self.leftEdge and
+     player.position.x < self.rightEdge and
+     player.position.y > self.topEdge and
+     player.position.y < self.bottomEdge then
+
+       if room.playerLeavingRoom and not self.locked then
+         game:changeRoom(self.nextRoom, self.roomEntry)
+       else
+         room.playerLeavingRoom = false
+       end
   end
 end
 

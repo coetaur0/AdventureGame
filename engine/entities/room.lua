@@ -4,6 +4,7 @@
 local Object = require "lib/classic"
 local Vector2D = require "lib/vector2d"
 local WalkArea = require "engine/pathfinding/walkarea"
+local Door = require "engine/entities/door"
 
 local gamera = require "lib/gamera"
 
@@ -55,6 +56,16 @@ function Room:new(roomName, entry)
   self.walkindices = {}
   self.walkpath = {}
 
+  -- Boolean indicating whether the player has clicked on a door to leave the
+  -- room.
+  self.playerLeavingRoom = false
+  -- The doors in the room are instantiated.
+  self.doors = {}
+  for i, door in ipairs(currentRoom.doors) do
+    table.insert(self.doors, Door(door.x, door.y, door.width, door.height,
+                                  door.locked, door.nextRoom, door.roomEntry))
+  end
+
   -- The lights in the room are created.
   if currentRoom.lights ~= nil then
     self.lightWorld = LightWorld:new()
@@ -82,6 +93,10 @@ function Room:update(dt)
   player:update(dt)
 
   self.camera:setPosition(player.position.x, player.position.y)
+
+  for i, door in ipairs(self.doors) do
+    door:update()
+  end
 
   if self.lightWorld ~= nil then
     self.lightWorld:Update()
