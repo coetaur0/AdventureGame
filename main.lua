@@ -21,6 +21,8 @@ end
 -- Callback function to handle mouse buttons being pressed.
 function love.mousepressed(x, y, button, istouch)
   if button == 1 then
+
+    -- Update the walk path of the player.
     room.walkpath = {}
     for i, v in ipairs(room.walkindices) do
       table.insert(room.walkpath, Vector2D(room.walkableArea.walkGraph.nodes[v].position.x,
@@ -46,7 +48,8 @@ function love.mousepressed(x, y, button, istouch)
       room.playerLeavingRoom = false
     end
 
-    -- Check if the player clicked on an item in the room.
+    -- Check if the player clicked on an item in the room to observe it
+    -- (left click).
     for i, item in ipairs(room.items) do
       if x > item.leftEdge and
          x < item.rightEdge and

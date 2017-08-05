@@ -1,12 +1,16 @@
 -- Definition of the Game class.
 -- Aurelien Coet, 2017.
 
+-- This class represents the state of the program when the user is playing (as
+-- opposed to when the user is in the game's menu).
+
 local Object = require "lib/classic"
 local Actor = require "engine/entities/actor"
 local Room = require "engine/entities/room"
 
 -- Import of the table containing the definition for the player.
-local playerDef = require "data/player_def"
+local playerDef = require "data/actors/hero"
+local rooms = require "data/rooms"
 
 local Game = Object:extend()
 
@@ -25,6 +29,16 @@ function Game:new()
   local items = require "data/items"
   for i, item in pairs(items) do
     itemStates[i] = "inRoom"
+  end
+
+  -- 'doorStates' is a list of booleans indicating whether each door in the game
+  -- is locked (true) or not (false).
+  doorsLocked = {}
+  for roomName, room in pairs(rooms) do
+    doorsLocked[roomName] = {}
+    for j, door in ipairs(room.doors) do
+      table.insert(doorsLocked[roomName], false)
+    end
   end
 
   -- Creation of the initial room. 'room' is a global variable.
@@ -55,7 +69,6 @@ function Game:update(dt)
   -- displayed anymore) after a given time.
   for i, message in ipairs(self.messages) do
     message.timelen = message.timelen - dt
-    print(message.timelen)
     if message.timelen <= 0 then
       table.remove(self.messages, i)
     end

@@ -1,6 +1,10 @@
 -- Definition of the Actor class.
 -- Aurelien Coet, 2017.
 
+-- An actor is a character in the game. Actors (including the player) are always
+-- located in one of the game's room, at a given position, and they can move
+-- inside it or even leave it. They are represented on screen with animations.
+
 local Vector2D = require "lib/vector2d"
 local Object = require "lib/classic"
 

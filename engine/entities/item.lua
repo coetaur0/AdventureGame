@@ -1,6 +1,10 @@
 -- Definition of the Item class.
 -- Aurelien Coet, 2017.
 
+-- An item is an object that can be interacted with in the game (it can always
+-- be 'observed' or 'looked at' when the player left clicks on it, and sometimes
+-- picked up if the player right clicks on it).
+
 local Object = require "lib/classic"
 local Vector2D = require "lib/vector2d"
 
@@ -14,14 +18,15 @@ local Item = Object:extend()
 
 --------------------------------------------------------------------------------
 -- Instantiate a new Item object.
--- @param The name of the item in the definition table for all items in the
--- game.
+-- @param itemName Name of the item in the definition table for all items in the
+--                 game.
 --------------------------------------------------------------------------------
 function Item:new(itemName)
   local itemDef = items[itemName]
 
   self.position = Vector2D(itemDef.x, itemDef.y)
 
+  -- Sprite of the item when inside a room.
   local image = love.graphics.newImage(itemDef.image)
   self.sprite = sodapop.newSprite(image, self.position.x, self.position.y)
   self.width = itemDef.width
@@ -32,12 +37,18 @@ function Item:new(itemName)
   self.topEdge = self.position.y - self.height/2
   self.bottomEdge = self.position.y + self.height/2
 
+  -- Representation of the item when it is inside the player's inventory.
   self.icon = love.graphics.newImage(itemDef.icon)
 
+  -- Message to display when the player left clicks on the item.
   self.onClickMessage = itemDef.onClickMessage
+
+  -- Action to perform or message to display when the player right clicks on the
+  -- item.
   self.onClickAction = itemDef.onClickAction
 
-  -- Variable indicating whether the player clicked on the item.
+  -- Variables indicating whether the player clicked on the item the last time
+  -- he clicked somewhere.
   self.clickedLeft = false
   self.clickedRight = false
   self.state = itemStates[itemName]
@@ -59,7 +70,7 @@ function Item:onLeftClick()
 end
 
 --------------------------------------------------------------------------------
--- Update the item.
+-- Update the item's state.
 --------------------------------------------------------------------------------
 function Item:update(dt)
   self.sprite:update(dt)

@@ -1,6 +1,11 @@
 -- Definition of the Room class.
 -- Aurelien Coet, 2017.
 
+-- A room is an area of the game in which the player can move. It has a
+-- background, and it contains items that can be observed, and sometimes even
+-- picked up. Other actors can also be in the room, and they can be interacted
+-- with.
+
 local Object = require "lib/classic"
 local Vector2D = require "lib/vector2d"
 local WalkArea = require "engine/pathfinding/walkarea"
@@ -64,7 +69,8 @@ function Room:new(roomName, entry)
   self.doors = {}
   for i, door in ipairs(currentRoom.doors) do
     table.insert(self.doors, Door(door.x, door.y, door.width, door.height,
-                                  door.locked, door.nextRoom, door.roomEntry))
+                                  doorsLocked[roomName][i], door.lockedMsg,
+                                  door.nextRoom, door.roomEntry))
   end
   -- Boolean indicating whether the player has clicked on a door to leave the
   -- room.

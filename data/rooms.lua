@@ -18,8 +18,8 @@ local rooms = {
 
     -- List of doors in the room.
     doors = {
-      {x = 100, y = 332, width = 95, height = 214, locked = true,
-       nextRoom = "secondary", roomEntry = "right"}
+      {x = 100, y = 332, width = 95, height = 214, nextRoom = "secondary",
+       roomEntry = "right", lockedMsg = "Oops, that door's locked..."}
     },
 
     -- List of vertices defining the polygons that make up the walkable area
@@ -78,7 +78,9 @@ local rooms = {
         {1195, 602},
         {84, 602}
       }
-    }
+    },
+
+    items = {}
   }
 }
 

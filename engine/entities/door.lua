@@ -1,6 +1,11 @@
 -- Definition of the Door class.
 -- Aurelien Coet, 2017.
 
+-- A door is a gateway to another room in the game. They are represented as
+-- trigger boxes that can change the room in which the player is in the game.
+-- A door is triggered when the player clicks on it and his character reaches
+-- the door after walking towards it.
+
 local Object = require "lib/classic"
 local Vector2D = require "lib/vector2d"
 
@@ -16,7 +21,7 @@ local Door = Object:extend()
 -- @param nextRoom Name of the room to which the door leads.
 -- @param roomEntry Name of the entrance to the room to which the door leads.
 --------------------------------------------------------------------------------
-function Door:new(x, y, width, height, locked, nextRoom, roomEntry)
+function Door:new(x, y, width, height, locked, lockedMsg, nextRoom, roomEntry)
   self.position = Vector2D(x, y)
   self.width = width
   self.height = height
@@ -25,6 +30,7 @@ function Door:new(x, y, width, height, locked, nextRoom, roomEntry)
   self.topEdge = self.position.y - self.height/2
   self.bottomEdge = self.position.y + self.height/2
   self.locked = locked
+  self.lockedMsg = lockedMsg
   self.nextRoom = nextRoom
   self.roomEntry = roomEntry
 end
@@ -46,7 +52,7 @@ function Door:update(dt)
          else
            -- If the door's locked, a message is displayed on screen to
            -- inform the player.
-           game:addMessage("That door is locked...",
+           game:addMessage(self.lockedMsg,
                            player.position.x + player.width/2,
                            player.position.y - player.height/2,
                            3
