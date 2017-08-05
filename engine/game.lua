@@ -18,6 +18,15 @@ function Game:new()
   player = Actor(playerDef.name, playerDef.x, playerDef.y, playerDef.speed,
                  playerDef.width, playerDef.height, playerDef.animations)
 
+  -- 'itemStates' is a list of strings indicating the state of each item in the
+  -- game: in a room (at its initial location), in the inventory of the player,
+  -- or destroyed (it has already been used by the player).
+  itemStates = {}
+  local items = require "data/items"
+  for i, item in pairs(items) do
+    itemStates[i] = "inRoom"
+  end
+
   -- Creation of the initial room. 'room' is a global variable.
   room = Room("main", "left")
   -- 'nextRoom' will be used to transit to another room when the player clicks

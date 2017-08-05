@@ -46,6 +46,10 @@ local rooms = {
       -- None
     },
 
+    items = {
+      "book"
+    },
+
     -- List of positions and radius for lights in the room.
     lights = nil
   },

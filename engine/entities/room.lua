@@ -5,6 +5,7 @@ local Object = require "lib/classic"
 local Vector2D = require "lib/vector2d"
 local WalkArea = require "engine/pathfinding/walkarea"
 local Door = require "engine/entities/door"
+local Item = require "engine/entities/item"
 
 local gamera = require "lib/gamera"
 
@@ -15,6 +16,8 @@ local Light = require("shadows.Light")
 
 -- The definition table for the rooms is retrieved.
 local rooms = require "data/rooms"
+-- The definition table for the items is retrieved.
+local items = require "data/items"
 
 local Room = Object:extend()
 
@@ -56,14 +59,22 @@ function Room:new(roomName, entry)
   self.walkindices = {}
   self.walkpath = {}
 
-  -- Boolean indicating whether the player has clicked on a door to leave the
-  -- room.
-  self.playerLeavingRoom = false
   -- The doors in the room are instantiated.
   self.doors = {}
   for i, door in ipairs(currentRoom.doors) do
     table.insert(self.doors, Door(door.x, door.y, door.width, door.height,
                                   door.locked, door.nextRoom, door.roomEntry))
+  end
+  -- Boolean indicating whether the player has clicked on a door to leave the
+  -- room.
+  self.playerLeavingRoom = false
+
+  -- Creation of the items inside the room.
+  self.items = {}
+  for i, itemName in ipairs(currentRoom.items) do
+    if itemStates[itemName] == "inRoom" then
+      table.insert(self.items, Item(itemName))
+    end
   end
 
   -- The lights in the room are created.
@@ -95,7 +106,11 @@ function Room:update(dt)
   self.camera:setPosition(player.position.x, player.position.y)
 
   for i, door in ipairs(self.doors) do
-    door:update()
+    door:update(dt)
+  end
+
+  for i, item in ipairs(self.items) do
+    item:update(dt)
   end
 
   if self.lightWorld ~= nil then
@@ -137,8 +152,23 @@ function Room:draw()
       end
     end
 
-    -- The player is drawn in the room.
-    player:draw()
+    -- All the elements in the room (including the player) are added to a queue
+    -- in order to be drawn.
+    local drawables = {}
+    table.insert(drawables, player)
+
+    for i, item in ipairs(self.items) do
+      table.insert(drawables, item)
+    end
+
+    -- The queue of elements to be drawn is sorted in ascending order of the
+    -- elements' y positions in the room.
+    table.sort(drawables, function(a, b)
+               return a.position.y+a.height/2 < b.position.y+b.height/2 end)
+
+    for y, drawable in ipairs(drawables) do
+      drawable:draw()
+    end
 
   end)
 

@@ -34,7 +34,8 @@ end
 -- clicked on it, it is being used.
 --------------------------------------------------------------------------------
 function Door:update(dt)
-  if player.position.x > self.leftEdge and
+  if player.destination:sub(player.position):norm() == 0 and
+     player.position.x > self.leftEdge and
      player.position.x < self.rightEdge and
      player.position.y > self.topEdge and
      player.position.y < self.bottomEdge then
