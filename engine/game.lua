@@ -53,6 +53,8 @@ function Game:new()
   -- List of messages that need to be printed on screen in the game.
   self.messages = {}
 
+  -- Variables for the execution of scripted scenes (cutscenes), where the
+  -- player doesn't have control over the game anymore.
   self.state = "running"
   self.script = nil
   self.nextScriptInstruct = nil
@@ -67,6 +69,8 @@ end
 -- Update the state of the game.
 --------------------------------------------------------------------------------
 function Game:update(dt)
+  -- If the game is currently executing a cutscene script, the 'executeScript'
+  -- function must be called to update the cutscene's state.
   if self.state == "cutscene" then
     self:executeScript()
   end
@@ -96,10 +100,10 @@ end
 -- Draw all the elements of the game.
 --------------------------------------------------------------------------------
 function Game:draw()
-  -- Draw the room and its elements.
+  -- Draw the room and its elements (including the player).
   room:draw()
 
-  -- Draw the messages to be displayed.
+  -- Draw the messages to be displayed in the game.
   for i, message in ipairs(self.messages) do
     love.graphics.print(message.text, message.x, message.y, 0, 1.5)
   end
