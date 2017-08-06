@@ -51,33 +51,36 @@ end
 -- Callback function to handle mouse buttons being pressed.
 --------------------------------------------------------------------------------
 function love.mousepressed(x, y, button, istouch)
-  if button == 1 then
+  if game.state == "running" then
 
-    applyNewWalkPath(x, y)
+    if button == 1 then
+      applyNewWalkPath(x, y)
 
-    -- Check if the player clicked on a door to go to another room.
-    for i, door in ipairs(room.doors) do
-      if x > door.leftEdge and
-         x < door.rightEdge and
-         y > door.topEdge and
-         y < door.bottomEdge then
-           room.playerLeavingRoom = true
-           break
+      -- Check if the player clicked on a door to go to another room.
+      for i, door in ipairs(room.doors) do
+        if x > door.leftEdge and
+           x < door.rightEdge and
+           y > door.topEdge and
+           y < door.bottomEdge then
+             room.playerLeavingRoom = true
+             break
+        end
+        room.playerLeavingRoom = false
       end
-      room.playerLeavingRoom = false
-    end
 
-    -- Check if the player clicked on an item in the room to observe it
-    -- (left click).
-    for i, item in ipairs(room.items) do
-      if x > item.leftEdge and
-         x < item.rightEdge and
-         y > item.topEdge and
-         y < item.bottomEdge then
-           item.clickedLeft = true
-      else
-        item.clickedLeft = false
+      -- Check if the player clicked on an item in the room to observe it
+      -- (left click).
+      for i, item in ipairs(room.items) do
+        if x > item.leftEdge and
+           x < item.rightEdge and
+           y > item.topEdge and
+           y < item.bottomEdge then
+             item.clickedLeft = true
+        else
+          item.clickedLeft = false
+        end
       end
     end
+    
   end
 end

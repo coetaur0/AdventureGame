@@ -4,6 +4,8 @@
 -- This class represents the state of the program when the user is playing (as
 -- opposed to when the user is in the game's menu).
 
+require "lib/deepcopy"
+
 local Object = require "lib/classic"
 local Actor = require "engine/entities/actor"
 local Room = require "engine/entities/room"
@@ -55,8 +57,8 @@ function Game:new()
   self.script = nil
   self.nextScriptInstruct = nil
 
-  if cutscenes["main"] then
-    self.script = cutscenes["main"]
+  if cutscenes["main"].onEntry then
+    self.script = deepcopy(cutscenes["main"].onEntry.script)
     self:executeScript()
   end
 end
@@ -109,7 +111,13 @@ end
 -- @param roomEntry Entrance the player will appear on in the room.
 --------------------------------------------------------------------------------
 function Game:changeRoom(roomName, roomEntry)
+  self.message = {}
   nextRoom = Room(roomName, roomEntry)
+
+  if cutscenes[roomName].onEntry and cutscenes[roomName].onEntry.always then
+    self.script = deepcopy(cutscenes[roomName].onEntry.script)
+    self:executeScript()
+  end
 end
 
 --------------------------------------------------------------------------------
