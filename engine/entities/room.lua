@@ -102,12 +102,6 @@ end
 -- Update the state of the room.
 --------------------------------------------------------------------------------
 function Room:update(dt)
-  local mouseX, mouseY = self.camera:toWorld(love.mouse.getX(),love.mouse.getY())
-
-  -- The new shortest path between the position of the player and the position
-  -- of the mouse is recomputed at every iteration of the game loop in the room.
-  self.walkindices = self.walkableArea:getShortestPath(player.position, Vector2D(mouseX, mouseY))
-
   player:update(dt)
 
   self.camera:setPosition(player.position.x, player.position.y)
@@ -143,19 +137,6 @@ function Room:draw()
         love.graphics.circle("fill", vertex.x, vertex.y, 4)
         next_vertex = polygon.vertices[i % #polygon.vertices + 1]
         love.graphics.line(vertex.x, vertex.y, next_vertex.x, next_vertex.y)
-      end
-    end
-
-    -- The shortest path between the player and the position of the mouse is drawn
-    -- with a red line.
-    love.graphics.setColor(255, 0, 0)
-    if #self.walkindices > 1 then
-      for i = 1, #self.walkindices-1 do
-        love.graphics.line(self.walkableArea.walkGraph.nodes[self.walkindices[i]].position.x,
-                           self.walkableArea.walkGraph.nodes[self.walkindices[i]].position.y,
-                           self.walkableArea.walkGraph.nodes[self.walkindices[i+1]].position.x,
-                           self.walkableArea.walkGraph.nodes[self.walkindices[i+1]].position.y
-                           )
       end
     end
 

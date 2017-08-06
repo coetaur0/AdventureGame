@@ -51,7 +51,11 @@ local rooms = {
     },
 
     -- List of positions and radius for lights in the room.
-    lights = nil
+    lights = nil,
+
+    onEntryScript = {
+      {"movePlayer", 97, 450}
+    }
   },
 
   -- Secondary room.
@@ -80,7 +84,9 @@ local rooms = {
       }
     },
 
-    items = {}
+    items = {},
+
+    onEntryScript = nil
   }
 }
 

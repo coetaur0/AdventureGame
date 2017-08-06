@@ -18,23 +18,42 @@ function love.draw()
   love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 10, 10)
 end
 
+--------------------------------------------------------------------------------
+-- Modify the walk path of the player to make him move to a new destination.
+-- @param x_dest New destination of the player on the x-axis.
+-- @param y_dest New destination of the player on the y-axis.
+--------------------------------------------------------------------------------
+function applyNewWalkPath(x_dest, y_dest)
+  local mouseX, mouseY = room.camera:toWorld(x_dest, y_dest)
+
+  -- Reset the walk path of the player.
+  room.walkpath = {}
+
+  -- The new shortest path between the position of the player and his new destination
+  -- is computed.
+  room.walkindices = room.walkableArea:getShortestPath(player.position, Vector2D(mouseX, mouseY))
+
+  for i, v in ipairs(room.walkindices) do
+    table.insert(room.walkpath, Vector2D(room.walkableArea.walkGraph.nodes[v].position.x,
+                                         room.walkableArea.walkGraph.nodes[v].position.y
+                                         )
+                )
+  end
+  -- The first element in the shortest path computed with A-star is the
+  -- position of the player: we remove it from the path he must take.
+  table.remove(room.walkpath, 1)
+
+  -- Add the new walkpath to the state of the player.
+  player:move(room.walkpath)
+end
+
+--------------------------------------------------------------------------------
 -- Callback function to handle mouse buttons being pressed.
+--------------------------------------------------------------------------------
 function love.mousepressed(x, y, button, istouch)
   if button == 1 then
 
-    -- Update the walk path of the player.
-    room.walkpath = {}
-    for i, v in ipairs(room.walkindices) do
-      table.insert(room.walkpath, Vector2D(room.walkableArea.walkGraph.nodes[v].position.x,
-                                           room.walkableArea.walkGraph.nodes[v].position.y
-                                           )
-                  )
-    end
-    -- The first element in the shortest path computed with A-star is the
-    -- position of the player: we remove it from the path he must take.
-    table.remove(room.walkpath, 1)
-    -- Add the new walkpath to the state of the player.
-    player:move(room.walkpath)
+    applyNewWalkPath(x, y)
 
     -- Check if the player clicked on a door to go to another room.
     for i, door in ipairs(room.doors) do
