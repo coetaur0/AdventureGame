@@ -55,7 +55,8 @@ function Item:new(itemName)
 end
 
 --------------------------------------------------------------------------------
--- Show the message associated to the item when the player left clicks on it.
+-- Show the message associated to the item when the player left clicks on it
+-- (when the item is inside a room).
 --------------------------------------------------------------------------------
 function Item:onLeftClick()
   local x = 0
@@ -70,12 +71,40 @@ function Item:onLeftClick()
 end
 
 --------------------------------------------------------------------------------
+-- Execute the action associated to the item when the player right clicks on it
+-- (when the item is inside a room).
+--------------------------------------------------------------------------------
+function Item:onRightClick()
+  if self.onClickAction == "pick up" then
+    -- TODO
+  elseif self.onClickAction == "use" then
+    -- TODO
+
+  -- Any other action than those above consists in a message that is displayed
+  -- to tell the player there is nothing particular to do with the item.
+  else
+    local x = 0
+    local y = player.position.y - player.height/2
+    if player.position.x < room.size[1]/2 then
+      x = player.position.x + player.width/2
+    else
+      x = player.position.x - player.width - love.graphics.getFont():getWidth(self.onClickAction)
+    end
+    game:addMessage(self.onClickAction, x, y, 3)
+  end
+
+  self.clickedRight = false
+end
+
+--------------------------------------------------------------------------------
 -- Update the item's state.
 --------------------------------------------------------------------------------
 function Item:update(dt)
   self.sprite:update(dt)
   if self.clickedLeft and player.destination:sub(player.position):norm() == 0 then
     self:onLeftClick()
+  elseif self.clickedRight and player.destination:sub(player.position):norm() == 0 then
+    self:onRightClick()
   end
 end
 
