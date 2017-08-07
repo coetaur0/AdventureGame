@@ -45,6 +45,7 @@ function applyNewWalkPath(x_dest, y_dest)
 
   -- Add the new walkpath to the state of the player.
   player:move(room.walkpath)
+
 end
 
 --------------------------------------------------------------------------------
@@ -54,6 +55,10 @@ function love.mousepressed(x, y, button, istouch)
   if game.state == "running" then
 
     if button == 1 then
+      -- If a message was being displayed in-game, it is erased when the
+      -- player moves.
+      game.message = nil
+
       applyNewWalkPath(x, y)
 
       -- Check if the player clicked on a door to go to another room.
@@ -81,6 +86,6 @@ function love.mousepressed(x, y, button, istouch)
         end
       end
     end
-    
+
   end
 end

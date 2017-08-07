@@ -50,8 +50,9 @@ function Game:new()
   -- on an unlocked door and actually reaches it.
   nextRoom = nil
 
-  -- List of messages that need to be printed on screen in the game.
-  self.messages = {}
+  -- Message which is printed in-game, for example when the player clicks on
+  -- an item.
+  self.message = nil
 
   -- Variables for the execution of scripted scenes (cutscenes), where the
   -- player doesn't have control over the game anymore.
@@ -86,12 +87,12 @@ function Game:update(dt)
   -- Update of the room's state.
   room:update(dt)
 
-  -- Update of the list of messages in the game. Messages are erased (not
-  -- displayed anymore) after a given time.
-  for i, message in ipairs(self.messages) do
-    message.timelen = message.timelen - dt
-    if message.timelen <= 0 then
-      table.remove(self.messages, i)
+  -- Update the message displayed in-game. A message is erased after a given
+  -- period of time.
+  if self.message then
+    self.message.timelen = self.message.timelen - dt
+    if self.message.timelen <= 0 then
+      self.message = nil
     end
   end
 end
@@ -104,8 +105,8 @@ function Game:draw()
   room:draw()
 
   -- Draw the messages to be displayed in the game.
-  for i, message in ipairs(self.messages) do
-    love.graphics.print(message.text, message.x, message.y, 0, 1.5)
+  if self.message then
+    love.graphics.print(self.message.text, self.message.x, self.message.y, 0, 1.5)
   end
 end
 
@@ -115,7 +116,7 @@ end
 -- @param roomEntry Entrance the player will appear on in the room.
 --------------------------------------------------------------------------------
 function Game:changeRoom(roomName, roomEntry)
-  self.message = {}
+  self.message = nil
   nextRoom = Room(roomName, roomEntry)
 
   if cutscenes[roomName].onEntry and cutscenes[roomName].onEntry.always then
@@ -134,7 +135,7 @@ end
 --                  displayed.
 --------------------------------------------------------------------------------
 function Game:addMessage(content, x_pos, y_pos, timesteps)
-  table.insert(self.messages, {text = content, x = x_pos, y = y_pos, timelen = timesteps})
+  self.message = {text = content, x = x_pos, y = y_pos, timelen = timesteps}
 end
 
 --------------------------------------------------------------------------------
@@ -161,7 +162,7 @@ function Game:executeScript()
         self.nextScriptInstruct = nil
       end
     elseif self.nextScriptInstruct[1] == "addMessage" then
-      if #self.messages == 0 then
+      if not self.message then
         self.nextScriptInstruct = nil
       end
     end
