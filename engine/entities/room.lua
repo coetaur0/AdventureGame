@@ -104,6 +104,7 @@ end
 function Room:update(dt)
   player:update(dt)
 
+  -- The camera always follows the player.
   self.camera:setPosition(player.position.x, player.position.y)
 
   for i, door in ipairs(self.doors) do

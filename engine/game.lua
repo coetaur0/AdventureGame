@@ -179,7 +179,7 @@ function Game:executeScript()
     else
       self.nextScriptInstruct = self.script[1]
       if self.nextScriptInstruct[1] == "movePlayer" then
-        applyNewWalkPath(self.nextScriptInstruct[2], self.nextScriptInstruct[3])
+        player:newWalkPath(self.nextScriptInstruct[2], self.nextScriptInstruct[3])
       elseif self.nextScriptInstruct[1] == "addMessage" then
         self:addMessage(self.nextScriptInstruct[2], self.nextScriptInstruct[3],
                         self.nextScriptInstruct[4], self.nextScriptInstruct[5])

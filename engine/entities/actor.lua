@@ -23,6 +23,7 @@ function Actor:new(name, x, y, speed, width, height, animations)
   self.name = name
   self.position = Vector2D(x, y)
   self.destination = Vector2D(x, y)
+  self.pathIndices = {}
   self.path = {}
   self.speed = speed
   self.width = width
@@ -67,6 +68,33 @@ function Actor:move(path)
 end
 
 --------------------------------------------------------------------------------
+-- Compute the new walkpath of an actor in order to make it move towards a new
+-- destination.
+-- @param x_dest Final destination of the actor on the x-axis.
+-- @param y_dest Final destination of the actor on the y-axis.
+--------------------------------------------------------------------------------
+function Actor:newWalkPath(x_dest, y_dest)
+  -- Reset the walk path of the actor.
+  self.path = {}
+
+  -- The shortest path between the position of the actor and its new destination
+  -- is computed.
+  self.pathIndices = room.walkableArea:getShortestPath(self.position, Vector2D(x_dest, y_dest))
+
+  local new_path = {}
+  for i, v in ipairs(self.pathIndices) do
+    table.insert(new_path, Vector2D(room.walkableArea.walkGraph.nodes[v].position.x,
+                                    room.walkableArea.walkGraph.nodes[v].position.y))
+  end
+
+  -- The first element in the shortest path computed with A-star is the
+  -- position of the actor: we remove it from the path it must take.
+  table.remove(new_path, 1)
+
+  self:move(new_path)
+end
+
+--------------------------------------------------------------------------------
 -- Update the state of the actor in the game loop.
 -- @param dt Timestep.
 --------------------------------------------------------------------------------
@@ -82,11 +110,7 @@ function Actor:update(dt)
       -- If the actor hasn't finished completing its path, we update its
       -- destination and its animation according to the new direction taken
       -- to reach the next destination.
-      self.destination = self.path[1]
-      table.remove(self.path, 1)
-
-      local direction = self.destination:sub(self.position)
-      self:updateAnimation(direction)
+      self:move(self.path)
     end
 
   -- If the actor hasn't reached its current destination yet, it moves further
