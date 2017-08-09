@@ -29,6 +29,25 @@ function Actor:new(name, x, y, speed, width, height, animations)
   self.width = width
   self.height = height
   self.animations = animations
+  self.scale = 1
+end
+
+--------------------------------------------------------------------------------
+-- Place the actor at a given position in the current room of the game.
+--------------------------------------------------------------------------------
+function Actor:setPositionInRoom(x, y, scalingImg)
+  self.position.x = x
+  self.position.y = y
+  self.destination.x = self.position.x
+  self.destination.y = self.position.y
+  self.animations.x = self.position.x
+  self.animations.y = self.position.y
+
+  local r, g, b, a = scalingImg:getData():getPixel(player.position.x,
+                                                   player.position.y)
+  self.scale = a/255
+  self.animations.sx = self.scale
+  self.animations.sy = self.scale
 end
 
 --------------------------------------------------------------------------------
@@ -101,6 +120,12 @@ end
 function Actor:update(dt)
   local direction = self.destination:sub(self.position)
 
+  -- The scale of the actor is updated according to the alpha value of the pixel
+  -- corresponding to its position in the scaling image associated to the
+  -- current room.
+  local r, g, b, a = room.scalingImg:getData():getPixel(self.position.x, self.position.y)
+  self.scale = a / 255
+
   -- If the actor reached its current destination in the path that was
   -- attributed to it, we update its destination according to the path.
   if direction:norm() == 0 then
@@ -118,10 +143,12 @@ function Actor:update(dt)
   else
     -- If the direction is longer than 'speed * dt', we normalize it and
     -- multiply it by 'speed * dt' to make the actor move by such a distance.
+    -- The speed of movement of the actor is also adapted according to its
+    -- scale so it doesn't look like it walks faster when its scale is smaller.
     if direction:norm() > self.speed * dt then
       direction:normalize()
-      direction.x = direction.x * self.speed * dt
-      direction.y = direction.y * self.speed * dt
+      direction.x = direction.x * self.speed * dt * self.scale
+      direction.y = direction.y * self.speed * dt * self.scale
     end
 
     -- Update of the position of the actor.
@@ -130,6 +157,9 @@ function Actor:update(dt)
     -- Update of the position of the animation of the actor.
     self.animations.x = self.position.x
     self.animations.y = self.position.y
+    -- Update its scale.
+    self.animations.sx = self.scale
+    self.animations.sy = self.scale
 
     self.animations:update(dt)
   end

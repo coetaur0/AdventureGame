@@ -8,6 +8,7 @@ local rooms = {
   -- Main room : just a simple test.
   main = {
     background = "assets/living_room.png",
+    scalingImg = "assets/bedroom_scaling.png",
 
     size = {1280, 720},
 
@@ -29,15 +30,15 @@ local rooms = {
       -- Walkable area.
       {
         {84, 356},
-        {232, 300},
-        {260, 300},
-        {297, 332},
-        {427, 332},
-        {475, 300},
-        {513, 330},
-        {750, 330},
-        {795, 300},
-        {1048, 300},
+        {232, 330},
+        {260, 330},
+        {297, 362},
+        {427, 362},
+        {475, 330},
+        {513, 360},
+        {750, 360},
+        {795, 330},
+        {1048, 330},
         {1196, 356},
         {1196, 605},
         {84, 605}
@@ -57,6 +58,7 @@ local rooms = {
   -- Secondary room.
   secondary = {
     background = "assets/bedroom.png",
+    scalingImg = "assets/bedroom_scaling.png",
 
     size = {1280, 720},
 
@@ -72,6 +74,10 @@ local rooms = {
     polygons = {
       {
         {210, 350},
+        {225, 350},
+        {273, 365},
+        {495, 365},
+        {531, 350},
         {633, 350},
         {633, 550},
         {1195, 550},

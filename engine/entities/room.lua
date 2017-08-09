@@ -35,18 +35,16 @@ function Room:new(roomName, entry)
   local currentRoom = rooms[roomName]
 
   self.background = love.graphics.newImage(currentRoom.background)
+  self.scalingImg = love.graphics.newImage(currentRoom.scalingImg)
   self.size = currentRoom.size
 
   -- A camera is created for the room.
   self.camera = gamera.new(0, 0, currentRoom.size[1], currentRoom.size[2])
 
   -- The player is placed in the room. ('player' is a global variable.)
-  player.position.x = currentRoom.entrances[entry][1]
-  player.position.y = currentRoom.entrances[entry][2]
-  player.destination.x = player.position.x
-  player.destination.y = player.position.y
-  player.animations.x = player.position.x
-  player.animations.y = player.position.y
+  player:setPositionInRoom(currentRoom.entrances[entry][1],
+                           currentRoom.entrances[entry][2],
+                           self.scalingImg)
 
   self.camera:setPosition(player.position.x, player.position.y)
 
