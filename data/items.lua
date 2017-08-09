@@ -8,9 +8,16 @@ local items = {
     image = "assets/book.png",
     width = 128,
     height = 94,
+
     icon = "assets/book.png",
-    onClickMessage = "That's a book about cooking insects.",
-    onClickAction = "I don't need that."
+    onClickMessageRoom = "That's a book about cooking insects.",
+    onClickActionRoom = "pick up",
+    onClickActionMsgRoom = "That'll come in handy.",
+
+    onClickMessageInventory = "Just a book about cooking bugs",
+    onClickActionInventory = "useWith",
+    useWith = "",
+    onClickActionMsgInvetory = "Cool",
   }
 }
 

@@ -80,7 +80,7 @@ function Room:new(roomName, entry)
   self.items = {}
   for i, itemName in ipairs(currentRoom.items) do
     if itemStates[itemName] == "inRoom" then
-      table.insert(self.items, Item(itemName))
+      self.items[itemName] = Item(itemName)
     end
   end
 
@@ -111,7 +111,7 @@ function Room:update(dt)
     door:update(dt)
   end
 
-  for i, item in ipairs(self.items) do
+  for i, item in pairs(self.items) do
     item:update(dt)
   end
 
@@ -146,14 +146,14 @@ function Room:draw()
     local drawables = {}
     table.insert(drawables, player)
 
-    for i, item in ipairs(self.items) do
+    for i, item in pairs(self.items) do
       table.insert(drawables, item)
     end
 
     -- The queue of elements to be drawn is sorted in ascending order of the
     -- elements' y positions in the room.
     table.sort(drawables, function(a, b)
-               return a.position.y+a.height/2 < b.position.y+b.height/2 end)
+                 return a.position.y+a.height/2 < b.position.y+b.height/2 end)
 
     for y, drawable in ipairs(drawables) do
       drawable:draw()
@@ -166,6 +166,14 @@ function Room:draw()
   if self.lightWorld ~= nil then
     self.lightWorld:Draw()
   end
+end
+
+--------------------------------------------------------------------------------
+-- Remove an item from the room.
+-- @param itemName Name of the item to be removed.
+--------------------------------------------------------------------------------
+function Room:removeItem(itemName)
+  self.items[itemName] = nil
 end
 
 return Room

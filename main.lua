@@ -47,7 +47,7 @@ function love.mousepressed(x, y, button, istouch)
 
     -- Check if the player clicked on an item in the room to observe it
     -- (left click) or use it/pick it up (right click).
-    for i, item in ipairs(room.items) do
+    for i, item in pairs(room.items) do
       if x > item.leftEdge and
          x < item.rightEdge and
          y > item.topEdge and

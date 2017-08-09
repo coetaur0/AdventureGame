@@ -24,6 +24,7 @@ local Item = Object:extend()
 function Item:new(itemName)
   local itemDef = items[itemName]
 
+  self.name = itemName
   self.position = Vector2D(itemDef.x, itemDef.y)
 
   -- Sprite of the item when inside a room.
@@ -40,12 +41,21 @@ function Item:new(itemName)
   -- Representation of the item when it is inside the player's inventory.
   self.icon = love.graphics.newImage(itemDef.icon)
 
-  -- Message to display when the player left clicks on the item.
-  self.onClickMessage = itemDef.onClickMessage
+  -- Message to display when the player left clicks on the item in the room.
+  self.onClickMessageRoom = itemDef.onClickMessageRoom
 
-  -- Action to perform or message to display when the player right clicks on the
-  -- item.
-  self.onClickAction = itemDef.onClickAction
+  -- Action to perform and message to display when the player right clicks on the
+  -- item when its inside a room.
+  self.onClickActionRoom = itemDef.onClickActionRoom
+  self.onClickActionMsgRoom = itemDef.onClickActionMsgRoom
+
+  -- Message to display when the player left clicks on the item in the room.
+  self.onClickMessageInventory = itemDef.onClickMessageInventory
+
+  -- Action to perform and message to display when the player right clicks on the
+  -- item when its inside his inventory.
+  self.onClickActionInventory = itemDef.onClickActionInventory
+  self.onClickActionMsgInventory = itemDef.onClickActionMsgInventory
 
   -- Variables indicating whether the player clicked on the item the last time
   -- he clicked somewhere.
@@ -64,9 +74,10 @@ function Item:onLeftClick()
   if player.position.x < room.size[1]/2 then
     x = player.position.x + player.width/2
   else
-    x = player.position.x - player.width - love.graphics.getFont():getWidth(self.onClickMessage)
+    x = player.position.x - player.width -
+        love.graphics.getFont():getWidth(self.onClickMessageRoom)
   end
-  game:addMessage(self.onClickMessage, x, y, 3)
+  game:addMessage(self.onClickMessageRoom, x, y, 3)
   self.clickedLeft = false
 end
 
@@ -75,24 +86,29 @@ end
 -- (when the item is inside a room).
 --------------------------------------------------------------------------------
 function Item:onRightClick()
-  if self.onClickAction == "pick up" then
-    -- TODO
-  elseif self.onClickAction == "use" then
-    -- TODO
+  -- Action to perform if the item is inside a room.
+  if self.state == "inRoom" then
+    if self.onClickActionRoom == "pick up" then
+      room:removeItem(self.name)
+      itemStates[self.name] = "inInventory"
+    elseif self.onClickActionRoom == "use" then
+      -- TODO
+    end
 
-  -- Any other action than those above consists in a message that is displayed
-  -- to tell the player there is nothing particular to do with the item.
-  else
     local x = 0
     local y = player.position.y - player.height/2
     if player.position.x < room.size[1]/2 then
       x = player.position.x + player.width/2
     else
-      x = player.position.x - player.width - love.graphics.getFont():getWidth(self.onClickAction)
+      x = player.position.x - player.width -
+          love.graphics.getFont():getWidth(self.onClickActionMsgRoom)
     end
-    game:addMessage(self.onClickAction, x, y, 3)
-  end
+    game:addMessage(self.onClickActionMsgRoom, x, y, 3)
 
+  -- Action to perform if it is in the inventory of the player.
+  elseif self.state == "inInventory" then
+    -- TODO
+  end
   self.clickedRight = false
 end
 
