@@ -43,8 +43,8 @@ function Actor:setPositionInRoom(x, y, scalingImg)
   self.animations.x = self.position.x
   self.animations.y = self.position.y
 
-  local r, g, b, a = scalingImg:getData():getPixel(player.position.x,
-                                                   player.position.y)
+  local r, g, b, a = scalingImg:getData():getPixel(self.position.x,
+                                                   self.position.y)
   self.scale = a/255
   self.animations.sx = self.scale
   self.animations.sy = self.scale
@@ -92,18 +92,18 @@ end
 -- @param x_dest Final destination of the actor on the x-axis.
 -- @param y_dest Final destination of the actor on the y-axis.
 --------------------------------------------------------------------------------
-function Actor:newWalkPath(x_dest, y_dest)
+function Actor:newWalkPath(x_dest, y_dest, currentRoom)
   -- Reset the walk path of the actor.
   self.path = {}
 
   -- The shortest path between the position of the actor and its new destination
   -- is computed.
-  self.pathIndices = room.walkableArea:getShortestPath(self.position, Vector2D(x_dest, y_dest))
+  self.pathIndices = currentRoom.walkableArea:getShortestPath(self.position, Vector2D(x_dest, y_dest))
 
   local new_path = {}
   for i, v in ipairs(self.pathIndices) do
-    table.insert(new_path, Vector2D(room.walkableArea.walkGraph.nodes[v].position.x,
-                                    room.walkableArea.walkGraph.nodes[v].position.y))
+    table.insert(new_path, Vector2D(currentRoom.walkableArea.walkGraph.nodes[v].position.x,
+                                    currentRoom.walkableArea.walkGraph.nodes[v].position.y))
   end
 
   -- The first element in the shortest path computed with A-star is the
@@ -117,14 +117,14 @@ end
 -- Update the state of the actor in the game loop.
 -- @param dt Timestep.
 --------------------------------------------------------------------------------
-function Actor:update(dt)
+function Actor:update(dt, currentRoom)
   local direction = self.destination:sub(self.position)
 
   -- The scale of the actor is updated according to the alpha value of the pixel
   -- corresponding to its position in the scaling image associated to the
   -- current room.
-  local r, g, b, a = room.scalingImg:getData():getPixel(self.position.x, self.position.y)
-  self.scale = a / 255
+  local r, g, b, a = currentRoom.scalingImg:getData():getPixel(self.position.x, self.position.y)
+  self.scale = a/255
 
   -- If the actor reached its current destination in the path that was
   -- attributed to it, we update its destination according to the path.

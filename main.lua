@@ -31,7 +31,7 @@ function love.mousepressed(x, y, button, istouch)
     -- A new path between the player's position and the position where the
     -- mouse was clicked is applied to the player.
     local mouseX, mouseY = room.camera:toWorld(x, y)
-    player:newWalkPath(mouseX, mouseY)
+    player:newWalkPath(mouseX, mouseY, room)
 
     -- Check if the player clicked on a door to go to another room.
     for i, door in ipairs(room.doors) do

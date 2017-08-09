@@ -39,7 +39,7 @@ end
 -- Update the state of the door: if the player's position is inside it and he
 -- clicked on it, it is being used.
 --------------------------------------------------------------------------------
-function Door:update(dt)
+function Door:update(dt, player, room)
   if player.destination:sub(player.position):norm() == 0 and
      player.position.x > self.leftEdge and
      player.position.x < self.rightEdge and

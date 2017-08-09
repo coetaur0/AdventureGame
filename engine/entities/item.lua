@@ -68,7 +68,7 @@ end
 -- Show the message associated to the item when the player left clicks on it
 -- (when the item is inside a room).
 --------------------------------------------------------------------------------
-function Item:onLeftClick()
+function Item:onLeftClick(player, room)
   local x = 0
   local y = player.position.y - player.height/2
   if player.position.x < room.size[1]/2 then
@@ -85,7 +85,7 @@ end
 -- Execute the action associated to the item when the player right clicks on it
 -- (when the item is inside a room).
 --------------------------------------------------------------------------------
-function Item:onRightClick()
+function Item:onRightClick(player, room)
   -- Action to perform if the item is inside a room.
   if self.state == "inRoom" then
     if self.onClickActionRoom == "pick up" then
@@ -115,12 +115,12 @@ end
 --------------------------------------------------------------------------------
 -- Update the item's state.
 --------------------------------------------------------------------------------
-function Item:update(dt)
+function Item:update(dt, player, room)
   self.sprite:update(dt)
   if self.clickedLeft and player.destination:sub(player.position):norm() == 0 then
-    self:onLeftClick()
+    self:onLeftClick(player, room)
   elseif self.clickedRight and player.destination:sub(player.position):norm() == 0 then
-    self:onRightClick()
+    self:onRightClick(player, room)
   end
 end
 

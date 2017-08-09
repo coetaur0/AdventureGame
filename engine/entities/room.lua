@@ -100,17 +100,17 @@ end
 -- Update the state of the room.
 --------------------------------------------------------------------------------
 function Room:update(dt)
-  player:update(dt)
+  player:update(dt, self)
 
   -- The camera always follows the player.
   self.camera:setPosition(player.position.x, player.position.y)
 
   for i, door in ipairs(self.doors) do
-    door:update(dt)
+    door:update(dt, player, self)
   end
 
   for i, item in pairs(self.items) do
-    item:update(dt)
+    item:update(dt, player, self)
   end
 
   if self.lightWorld ~= nil then
