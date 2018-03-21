@@ -1,5 +1,5 @@
 # AdventureGame
-A point and click adventure game programmed in Lua with the LÖVE 2D framework.
+Point and click adventure game programmed in Lua with the LÖVE 2D framework.
 
 The goal of this project is to develop a 2D adventure game completely from scratch, including the engine of the game, the
 assets used, etc. The development is currently still at a very early stage, and consists more in a prototype than an actual 
