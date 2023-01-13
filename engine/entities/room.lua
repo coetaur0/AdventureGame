@@ -1,5 +1,6 @@
 -- Definition of the Room class.
 -- Aurelien Coet, 2017.
+-- changed by Kenneth Bartsch, 2023.
 
 -- A room is an area of the game in which the player can move. It has a
 -- background, and it contains items that can be observed, and sometimes even
