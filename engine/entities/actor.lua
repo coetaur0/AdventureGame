@@ -1,5 +1,6 @@
 -- Definition of the Actor class.
 -- Aurelien Coet, 2017.
+-- changed by Kenneth Bartsch, 2023.
 
 -- An actor is a character in the game. Actors (including the player) are always
 -- located in one of the game's room, at a given position, and they can move
