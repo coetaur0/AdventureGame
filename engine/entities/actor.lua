@@ -1,5 +1,6 @@
 -- Definition of the Actor class.
 -- Aurelien Coet, 2017.
+-- changed by Kenneth Bartsch, 2023.
 
 -- An actor is a character in the game. Actors (including the player) are always
 -- located in one of the game's room, at a given position, and they can move
@@ -35,7 +36,7 @@ end
 --------------------------------------------------------------------------------
 -- Place the actor at a given position in the current room of the game.
 --------------------------------------------------------------------------------
-function Actor:setPositionInRoom(x, y, scalingImg)
+function Actor:setPositionInRoom(x, y, imageData)
   self.position.x = x
   self.position.y = y
   self.destination.x = self.position.x
@@ -43,9 +44,9 @@ function Actor:setPositionInRoom(x, y, scalingImg)
   self.animations.x = self.position.x
   self.animations.y = self.position.y
 
-  local r, g, b, a = scalingImg:getData():getPixel(self.position.x,
+  local r, g, b, a = imageData:getPixel(self.position.x,
                                                    self.position.y)
-  self.scale = a/255
+  self.scale = a
   self.animations.sx = self.scale
   self.animations.sy = self.scale
 end
@@ -117,15 +118,16 @@ end
 -- Update the state of the actor in the game loop.
 -- @param dt Timestep.
 --------------------------------------------------------------------------------
-function Actor:update(dt, currentRoom)
+function Actor:update(dt, imageData)
   local direction = self.destination:sub(self.position)
 
   -- The scale of the actor is updated according to the alpha value of the pixel
   -- corresponding to its position in the scaling image associated to the
   -- current room.
-  local r, g, b, a = currentRoom.scalingImg:getData():getPixel(self.position.x, self.position.y)
-  self.scale = a/255
-
+  
+  local r, g, b, a = imageData:getPixel(self.position.x, self.position.y)
+  self.scale = a
+  
   -- If the actor reached its current destination in the path that was
   -- attributed to it, we update its destination according to the path.
   if direction:norm() == 0 then

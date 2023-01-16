@@ -1,5 +1,6 @@
 -- Definition of the Room class.
 -- Aurelien Coet, 2017.
+-- changed by Kenneth Bartsch, 2023.
 
 -- A room is an area of the game in which the player can move. It has a
 -- background, and it contains items that can be observed, and sometimes even
@@ -35,7 +36,7 @@ function Room:new(roomName, entry)
   local currentRoom = rooms[roomName]
 
   self.background = love.graphics.newImage(currentRoom.background)
-  self.scalingImg = love.graphics.newImage(currentRoom.scalingImg)
+  self.scalingImg = love.image.newImageData(currentRoom.scalingImg)
   self.size = currentRoom.size
 
   -- A camera is created for the room.
@@ -100,7 +101,7 @@ end
 -- Update the state of the room.
 --------------------------------------------------------------------------------
 function Room:update(dt)
-  player:update(dt, self)
+  player:update(dt, self.scalingImg)
 
   -- The camera always follows the player.
   self.camera:setPosition(player.position.x, player.position.y)
